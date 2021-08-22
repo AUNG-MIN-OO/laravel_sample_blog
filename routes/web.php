@@ -16,9 +16,24 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('article','ArticleController');
+Route::get("about","PageController@about")->name('page.about');
+Route::get("article","PageController@index")->name('page.article');
+
+Route::prefix("user-panel")->middleware("auth")->group(function (){
+
+    Route::get('/home', 'HomeController@index')->name('home');
+
+    Route::resource('article','ArticleController');
+
+    Route::get('/profile','ProfileController@edit')->name('profile.edit');
+
+    Route::post('/profile','ProfileController@update')->name('profile.update');
+//    Route::post('/profile')
+
+});
+
+Route::get('article/search','ArticleController@search')->name("article.search");
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
 

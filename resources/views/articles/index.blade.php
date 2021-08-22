@@ -9,9 +9,18 @@
                     <li class="breadcrumb-item active" aria-current="page">Article</li>
                 @endcomponent
                 <div class="card">
-                    <div class="card-header bg-primary text-white">Article List</div>
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <span>Article List</span>
+                        <div class="search">
+                            <form action="{{route('article.search')}}" method="get" class="form-inline">
+                                <input type="text" class="form-control mr-2" placeholder="Search" name="searchKey">
+                                <button class="btn btn-success">Search</button>
+                            </form>
+                        </div>
+                    </div>
 
                     <div class="card-body">
+                        {{ $articles->appends(Request::all())->links() }}
                         <table class="table table-striped table-responsive table-hover">
                             <thead>
                             <tr>
@@ -32,8 +41,13 @@
                                     <td>{{substr($article->description,0,50)}}</td>
                                     <td class="text-nowrap">{{$users->find($article->user_id)->name}}</td>
                                     <td class="text-nowrap">
-                                        <a href="" class="btn btn-sm btn-warning">Edit</a>
-                                        <a href="" class="btn btn-sm btn-danger">Delete</a>
+                                        <a href="{{route("article.show",$article->id)}}" class="btn btn-sm btn-outline-success">Detail</a>
+                                        <a href="{{route("article.edit",$article->id)}}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                        <button class="btn btn-sm btn-outline-danger" form="delete">Delete</button>
+                                        <form action="{{route('article.destroy',$article->id)}}" id="delete" method="post">
+                                            @csrf
+                                            @method("delete")
+                                        </form>
                                     </td>
                                     <td class="text-nowrap">
                                         {{$article->created_at->format("d F Y")}}

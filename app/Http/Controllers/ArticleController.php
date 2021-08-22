@@ -19,7 +19,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::all();
+        $articles = Article::orderBy("id","desc")->paginate(5);
         return view('articles.index',compact('articles'));
     }
 
@@ -34,7 +34,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resource in store.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -63,7 +63,7 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        //
+        return view('articles.show',compact('article'));
     }
 
     /**
@@ -74,11 +74,11 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        //
+        return view("articles.edit",compact('article'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in store.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Article  $article
@@ -86,17 +86,34 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        //
+        $request->validate([
+            "title" => "required|min:10|max:255",
+            "description" => "required|min:30",
+        ]);
+
+        $article->title = $request->title;
+        $article->description = $request->description;
+        $article->update();
+        return redirect()->route("article.index")->with("toast","Article has been updated");
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resource from store.
      *
      * @param  \App\Article  $article
      * @return \Illuminate\Http\Response
      */
     public function destroy(Article $article)
     {
-        //
+        $article->delete();
+        return redirect()->route("article.index")->with("toast","Post has been deleted");
+    }
+
+    public function search(Request $request){
+        $searchKey = $request->searchKey;
+
+        $articles = Article::where("title","LIKE","%$searchKey%")->orWhere("description","LIKE","%$searchKey%")->paginate(5);
+        return view('articles.index',compact('articles'));
     }
 }
+
