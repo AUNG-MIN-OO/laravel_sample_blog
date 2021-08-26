@@ -14,6 +14,7 @@
                             <div class="card-header bg-primary text-white">Edit Profile</div>
 
                             <div class="card-body">
+                                <img src="{{ asset("storage/profile/".\Illuminate\Support\Facades\Auth::user()->image) }}" class="w-100 rounded" alt="">
                                 <form action="{{route('profile.update')}}" method="post" enctype="multipart/form-data">
                                     @csrf
                                     <div class="form-group">
@@ -23,25 +24,25 @@
                                         <small class="text-danger font-weight-bold">{{$message}}</small>
                                         @enderror
                                     </div>
-                                    <a href="" class="btn btn-outline-primary">Go Back</a>
-                                    <button class="btn btn-primary">Update Article</button>
+                                    <button class="btn btn-primary w-100 mb-4">Update Profile</button>
+                                    <a href="" class="btn btn-outline-primary w-100">Go Back</a>
                                 </form>
                             </div>
                         </div>
                     </div>
-                    <div>
-                        @isset($arr)
-                            @foreach($arr as $a)
-                                @if($a != "." && $a != "..")
-                                    <ul>
-                                        <li>
-                                            <img src="{{asset('storage/'.$a)}}" style="width: 100px;" alt="">
-                                        </li>
-                                    </ul>
-                                @endif
-                            @endforeach
-                        @endisset
-                    </div>
+{{--                    <div>--}}
+{{--                        @isset($arr)--}}
+{{--                            @foreach($arr as $a)--}}
+{{--                                @if($a != "." && $a != "..")--}}
+{{--                                    <ul>--}}
+{{--                                        <li>--}}
+{{--                                            <img src="{{asset('storage/'.$a)}}" style="width: 100px;" alt="">--}}
+{{--                                        </li>--}}
+{{--                                    </ul>--}}
+{{--                                @endif--}}
+{{--                            @endforeach--}}
+{{--                        @endisset--}}
+{{--                    </div>--}}
                 </div>
             </div>
         </dia>

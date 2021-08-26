@@ -13,7 +13,7 @@
                     <div class="card-header bg-primary text-white">Add Article</div>
 
                     <div class="card-body">
-                        <form action="{{ route("article.store") }}" method="post">
+                        <form action="{{ route("article.store") }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <label for="title">Title</label>
@@ -21,6 +21,17 @@
                                 @error("title")
                                     <small class="text-danger font-weight-bold">{{$message}}</small>
                                 @enderror
+                            </div>
+                            <div class="form-group">
+                                <div class="form-row">
+                                    <div class="col-12 col-md-6">
+                                        <label for="image">Choose Image</label>
+                                        <input type="file" id="image" name="image[]" multiple class="form-control p-1">
+                                        @error("image.*")
+                                            <small class="text-danger font-weight-bold">{{$message}}</small>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="description">Description</label>

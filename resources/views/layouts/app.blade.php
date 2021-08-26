@@ -19,6 +19,7 @@
     {{--    Css--}}
     <link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap.min.css')}}">
 
+    @yield('head')
 
 </head>
 <body>
@@ -78,6 +79,7 @@
                             </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <img src="{{asset("storage/profile/".\Illuminate\Support\Facades\Auth::user()->image)}}" alt="" class="rounded" style="width: 30px">
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
@@ -108,5 +110,6 @@
     </div>
     <script src="{{ asset('assets/jQuery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
+    @yield('foot')
 </body>
 </html>

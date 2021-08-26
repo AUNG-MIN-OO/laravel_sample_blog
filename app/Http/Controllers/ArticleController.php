@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
@@ -41,16 +43,40 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
+        if (!$request->hasFile('image')){
+            return redirect()->back()->withErrors(["image.*"=>"Image is required"]);
+        }
         $request->validate([
-            "title"=> "required|min:10|max:255",
-            "description"=> "required|min:30",
+//            "title"=> "required|min:10|max:255",
+//            "description"=> "required|min:30",
+            "image.*"=>"mimetypes:image/jpeg,image/png"
         ]);
+        $fileNameArr = [];
+
+        if ($request->hasFile('image')){
+
+            foreach ($request->file('image') as $file){
+                $fileName = uniqid()."_article.".$file->getClientOriginalExtension();
+                array_push($fileNameArr,$fileName);
+                $dir = "/public/articles/";
+                $file->storeAs($dir,$fileName);
+            }
+        }
 
         $article = new Article();
         $article->title = $request->title;
         $article->description = $request->description;
         $article->user_id = Auth::id();
         $article->save();
+
+        if ($request->hasFile('image')){
+            foreach ($fileNameArr as $f){
+                $photo = new Photo();
+                $photo->article_id = $article->id;
+                $photo->location = $f;
+                $photo->save();
+            }
+        }
 
         return redirect()->route('article.create')->with("toast","New article is added");
     }

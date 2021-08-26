@@ -25,11 +25,11 @@ Route::prefix("user-panel")->middleware("auth")->group(function (){
 
     Route::resource('article','ArticleController');
 
+    Route::resource('photo','PhotoController');
+
     Route::get('/profile','ProfileController@edit')->name('profile.edit');
 
     Route::post('/profile','ProfileController@update')->name('profile.update');
-//    Route::post('/profile')
-
 });
 
 Route::get('article/search','ArticleController@search')->name("article.search");
